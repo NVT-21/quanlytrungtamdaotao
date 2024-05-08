@@ -1,0 +1,81 @@
+<main>
+    <h1>Danh sách học viên đang chờ</h1>
+    <button class="add-btn" onclick="window.location.href='/views/addCourse'">Thêm tất cả vào lớp </button> <!-- Thêm nút thêm khóa học -->
+   
+    {{!-- <div class="filter-container">
+    <label for="filter-select">Lọc theo:</label>
+    <select id="filter-select">
+        <option value="all">Tất cả</option>
+        <!-- Thêm các tùy chọn lọc khác tại đây -->
+    </select> --}}
+</div>
+    <div data-idClass="{{idClass}}" class="course-list">
+        {{#each registerStudent}}
+            <div data-id="{{registerId}}" class="course-card">
+                <!-- Thông tin của khóa học -->
+                <h2>Tên: {{student.Name}}</h2>
+                <p>Giới tính: {{student.Sex}}</p>
+                <p>Ngày sinh:{{student.BirthDay}}</p>
+                <button class="addStudent"class="edit-btn" >thêm vào lớp  </button>
+            </div>
+        {{/each}}
+    </div>
+      
+</main>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    const showAlert = (type, msg) => {
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.parentElement.removeChild(alert);
+    }, 5000);
+  };
+    document.querySelectorAll(".addStudent").forEach(function(button) {
+
+    button.addEventListener("click", function(e) {
+        e.preventDefault();
+        const idClass = document.querySelector('.course-list').getAttribute('data-idClass');
+
+        const registerId = e.target.closest('.course-card').dataset.id;
+      
+        const data ={
+            "idRegister":registerId*1,
+            "idClass" :idClass*1
+        }
+        console.log(data);
+
+        axios.patch('http://localhost:3000/class/addStudent', data,{
+      withCredentials: true
+  })
+      .then(response => {
+        if(response.data.status=="Success"){
+          showAlert("success","Thêm vào lớp thành công")
+        }
+        console.log('Course created successfully:', response.data);
+        setTimeout(() => {
+        window.location.reload();
+    }, 2000); 
+        // Handle success response, e.g., show a success message to the user
+      })
+      .catch(error => {
+        showAlert("error",error.response.data.error)
+        console.error('There was a problem creating the course:', error);
+        // Handle error, e.g., show an error message to the user
+      });
+  
+    })
+    })
+
+
+    
+</script>
+
+
+
+

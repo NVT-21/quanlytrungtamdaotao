@@ -1,0 +1,293 @@
+
+
+    
+    <main>
+        <section class="thong-tin-lop">
+            <h2>Thông tin lớp Nâng cao 02</h2>
+            <form id="add-class-form" action="#">
+                <ul>
+                    <li>
+                        <label for="ten-lop">Tên lớp:</label>
+                        <input type="text" id="ten-lop" name="ten-lop" value="{{nameClass}}" placeholder="Nhập tên lớp"readonly>
+                    </li>
+                    <li>
+                        <label for="khoa-hoc">Khóa học:</label>
+                        <input data-id="{{course.idCourse}}" type="text" id="khoa-hoc" name="khoa-hoc" value="{{course.Name}}" placeholder="Nhập tên khóa học"readonly>
+                    </li>
+                    <li>
+                        <label for="ngay-bat-dau">Ngày bắt đầu:</label>
+                        <input type="date" id="ngay-bat-dau" name="ngay-bat-dau" required>
+                    </li>
+                    <li>
+                        <label for="ngay-ket-thuc">Ngày kết thúc:</label>
+                        <input type="date" id="ngay-ket-thuc" name="ngay-ket-thuc" readonly required >
+                    </li>
+                    <li>
+                        <label for="si-so-toi-da">Sĩ số tối đa:</label>
+                        <input type="number" id="si-so-toi-da" name="si-so-toi-da" placeholder="Nhập số lượng" required>
+                    </li>
+                    <li>
+                        <label for="so-buoi">Số buổi:</label>
+                        <input type="number" id="so-buoi" name="so-buoi" value="{{course.totalSession}}"  placeholder="Nhập số buổi"readonly>
+                    </li>
+                    <li>
+                        <label for="hoc-phi-moi-buoi">Học phí </label>
+                        <input type="number" id="hoc-phi-moi-buoi" value="{{course.tuition}}" name="hoc-phi-moi-buoi" placeholder="Nhập số tiền"readonly>
+                    </li>
+                </ul>
+                 <div class="thoi-gian-hoc">
+                <h3>Thời gian học</h3>
+                <table id="Schedule" border="1">
+                    <tr>
+                        <th>Ngày trong tuần</th>
+                        <th>Giờ bắt đầu</th>
+                        <th>Giờ kết thúc</th>
+                        <th>Giáo viên</th>
+                        
+                    </tr>
+                   
+                </table>
+            </div>
+             <button id="addClass" class="edit-btn" type="submit">Tạo Lớp</button>
+            <button id="createEndDay" class="edit-btn" type="submit">Tạo ngày kết thúc</button>
+            </form>
+              <section class="them-thoi-gian-hoc">
+                <h2>Thêm thời gian học</h2>
+                <form id="add-time-form">
+                    <div class="form-group">
+                        <label for="ngay-trong-tuan">Ngày trong tuần:</label>
+                        <select id="ngay-trong-tuan" required>
+                            <option value="Thứ Hai">Thứ Hai</option>
+                            <option value="Thứ Ba">Thứ Ba</option>
+                             <option value="Thứ Tư">Thứ Tư</option>
+                              <option value="Thứ Năm">Thứ Năm</option>
+                            <option value="Thứ Sáu">Thứ Sáu</option>\
+                             <option value="Thứ Bảy">Thứ Bảy</option>
+                              <option value="Chủ nhật">Chủ nhật</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gio-bat-dau">Giờ bắt đầu:</label>
+                        <input type="time" id="gio-bat-dau" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gio-ket-thuc">Giờ kết thúc:</label>
+                        <input type="time" id="gio-ket-thuc" required>
+                    </div>
+                    <div class="form-group">
+                       <label for="giao-vien">Giáo viên:</label>
+                        <select id="giao-vien" required>
+                             {{#each teachers}}
+                            <option  value="{{Name}}">{{Name}}</option>
+                             {{/each}}
+        <!-- Thêm các tùy chọn khác tại đây -->
+                         </select>
+                    </div>
+                    <button class="edit-btn" type="submit">Thêm vào bảng thời gian học</button>
+                </form>
+            </section>
+           
+        
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("add-time-form"); // Lấy thẻ form
+    const tableBody = document.querySelector(".thoi-gian-hoc table tbody"); // Lấy phần body của bảng thời gian học
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+        // Lấy giá trị từ các input/select
+        const ngayTrongTuan = document.getElementById("ngay-trong-tuan").value;
+        const gioBatDau = document.getElementById("gio-bat-dau").value;
+        const gioKetThuc = document.getElementById("gio-ket-thuc").value;
+        const giaoVien = document.getElementById("giao-vien").value;
+       
+        
+
+        // Tạo một hàng mới cho bảng
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td>${ngayTrongTuan}</td>
+            <td>${gioBatDau}</td>
+            <td>${gioKetThuc}</td>
+            <td>${giaoVien}</td>
+        `;
+
+        // Thêm hàng mới vào bảng
+        tableBody.appendChild(newRow);
+
+        // Xóa giá trị trong các input/select sau khi thêm vào bảng
+        document.getElementById("ngay-trong-tuan").value = "";
+        document.getElementById("gio-bat-dau").value = "";
+        document.getElementById("gio-ket-thuc").value = "";
+        document.getElementById("giao-vien").value = "";
+    });
+});
+
+</script>
+<script>
+      const showAlert = (type, msg) => {
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.parentElement.removeChild(alert);
+    }, 5000);
+  };
+    document.getElementById('add-class-form').addEventListener('submit', function(event) {
+    // Ngăn chặn hành động mặc định của form (ví dụ: tải lại trang)
+    event.preventDefault();
+   const ngayKetThucInput = document.getElementById('ngay-ket-thuc');
+   if(!ngayKetThucInput.value){
+    return alert("Bạn chưa tạo ngày kết thúc ")
+   }
+   const id =document.getElementById('khoa-hoc').dataset.id
+    // Khởi tạo một mảng để lưu trữ các object từ bảng
+let data = [];
+
+// Lấy thẻ table từ DOM
+const table = document.getElementById("Schedule");
+
+// Lấy tất cả các hàng (tr) trong bảng
+const rows = table.getElementsByTagName("tr");
+console.log(rows)
+// Duyệt qua từng hàng (tr) trong bảng
+for (let i = 1; i < rows.length; i++) { // Bắt đầu từ 1 để bỏ qua hàng đầu tiên (header)
+    const row = rows[i];
+    
+    // Lấy tất cả các ô (td) trong hàng
+    const cells = row.getElementsByTagName("td");
+    
+    // Tạo một object để lưu trữ dữ liệu từ hàng này
+    let rowData = {
+        'weekdays': cells[0].innerText,
+        'startTime': cells[1].innerText,
+        'endTime': cells[2].innerText,
+        'nameTeacher': cells[3].innerText
+    };
+    
+    // Thêm object vào mảng
+    data.push(rowData);
+}
+
+// Hiển thị mảng object đã tạo
+console.log(data);
+
+    if (table.rows.length <= 1) {
+            alert("Vui lòng thêm thời gian học trước khi tạo lớp!");
+            return; // Ngăn chặn tiếp tục thực hiện hành động mặc định của nút submit
+        }
+    
+    const ngaybd=document.getElementById('ngay-bat-dau').value;
+    const Name=document.getElementById('ten-lop').value;
+    const ngaykt=document.getElementById('ngay-ket-thuc').value;
+    const siSo=document.getElementById('si-so-toi-da').value;
+     const formData = new FormData();
+    formData.append('Name', Name);
+    formData.append('NumeberStudent', siSo);
+    formData.append('startDay', ngaybd);
+    formData.append('endDay', ngaykt);
+    
+    
+    const jsonData = {};
+    formData.forEach((value, key) => {
+      jsonData[key] = value;
+    });
+    console.log(jsonData);
+     axios.post(`http://localhost:3000/class/createClass/${id}`, jsonData,{
+      withCredentials: true
+  })
+      .then(response => {
+        const idClass=response.data.idClass
+        for(let i=0;i<data.length;i++){
+          axios.post(`http://localhost:3000/class/createSchedule/${idClass}`, data[i],{
+      withCredentials: true
+  })
+      .then(response => {
+          if(response.data.status=="Success"){
+          showAlert("success","Tạo mới thành công")
+        }
+        console.log('Course created successfully:', response.data);
+        // Handle success response, e.g., show a success message to the user
+      })
+      .catch(error => {
+        console.error('There was a problem creating the course:', error);
+        // Handle error, e.g., show an error message to the user
+      });
+        }
+        console.log('Course created successfully:', response.data);
+        // Handle success response, e.g., show a success message to the user
+      })
+      .catch(error => {
+        console.error('There was a problem creating the course:', error);
+        // Handle error, e.g., show an error message to the user
+      });
+    // Thực hiện các thao tác xử lý khi form được submit ở đây
+    // Ví dụ: Gọi hàm để xử lý việc tạo lớp học và thêm thời gian học vào bảng
+
+    // Sau khi hoàn thành xử lý, có thể redirect hoặc hiển thị thông báo thành công
+});
+
+
+</script>
+<script>
+    document.getElementById('createEndDay').addEventListener('click', function(event){
+        event.preventDefault();
+         const ngaybd = document.getElementById('ngay-bat-dau').value;
+         const sobuoi = document.getElementById('so-buoi').value;
+         const row = document.getElementById('rowId');
+
+        const ngayTrongTuanValues = [];
+
+// Lấy tất cả các ô trong cột "Ngày trong tuần" (cột đầu tiên)
+const ngayTrongTuanCells = document.querySelectorAll('#Schedule td:nth-child(1)');
+
+// Lặp qua từng ô và lấy giá trị của nó, sau đó thêm vào mảng
+ngayTrongTuanCells.forEach(cell => {
+    ngayTrongTuanValues.push(cell.textContent);
+});
+    const data ={
+        "startDate":ngaybd,
+        "schedule":ngayTrongTuanValues,
+        "totalSessions":sobuoi*1
+    }
+    console.log(data);
+    axios.post('http://localhost:3000/schedule/findEndDay', data,{
+      withCredentials: true
+  })
+      .then(response => {
+        if(response.data.status=="Success"){
+          showAlert("success","Tạo thành công")
+        }
+       // Split ngày tháng và năm từ chuỗi ngày tháng ban đầu
+// Split ngày tháng và năm từ chuỗi ngày tháng ban đầu
+const parts = response.data.endDay.split('/');
+
+// Lấy ngày, tháng và năm từ mảng parts
+const day = parts[1].padStart(2, '0'); // Đảm bảo ngày có hai chữ số
+const month = parts[0].padStart(2, '0'); // Đảm bảo tháng có hai chữ số
+const year = parts[2];
+
+// Tạo lại chuỗi ngày tháng với định dạng mới
+const formattedDate = `${year}-${month}-${day}`;
+
+// Gán giá trị cho input type="date"
+document.getElementById('ngay-ket-thuc').value = formattedDate;
+
+
+
+        // Handle success response, e.g., show a success message to the user
+      })
+      .catch(error => {
+        showAlert("error",error.message)
+        console.error('There was a problem creating the course:', error);
+        // Handle error, e.g., show an error message to the user
+      });
+  });
+
+    
+</script>
+
+

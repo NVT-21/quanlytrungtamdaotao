@@ -1,0 +1,192 @@
+<main>
+    <h1>Danh sách lớp học</h1>
+    <button class="add-btn" onclick="window.location.href='/views/getAllCourse'">Thêm lớp học</button> <!-- Thêm nút thêm khóa học -->
+   <div class="search-container">
+        <input type="text" class="search-input" placeholder="Tìm kiếm ...">
+        <button  class="search-btn" >Tìm kiếm</button>
+    </div>
+    <div class="filter-container">
+    <label for="filter-select">Lọc theo:</label>
+    <select id="filter-select">
+        <option value="all">Tất cả</option>
+        {{#each course}}
+        <option value="{{Name}}">{{Name}}</option>
+        {{/each}}
+        <!-- Thêm các tùy chọn lọc khác tại đây -->
+    </select>
+</div>
+    <div class="course-list">
+        {{#each classes}}
+            <div data-id="{{idClass}}" class="course-card">
+                <!-- Thông tin của khóa học -->
+                <h2>Name: {{Name}}</h2>
+                <p>Ngày Bắt Đầu: {{startDay}}</p>
+                <p>Ngày Kết Thúc:{{endDay}}</p>
+                <p>Trạng Thái: {{Status}}</p>
+                <p>Tổng số học sinh:{{NumeberStudent}} </p>
+                <p>Số học sinh đang học:  {{totalStudent}}</p>
+
+                <button class="edit-btn" onclick="window.location.href='/views/StudentOfClass/{{idClass}}'">Danh sách học viên </button>
+                 <button class="edit-btn" onclick="window.location.href='/views/editCourse/{{idCourse}}'">Điểm danh</button>
+            </div>
+        {{/each}}
+    </div>
+      <div id="pagination" class="pagination">
+        <button class="prev-btn" onclick="navigatePreviousPage()" >Trang trước </button>
+        <span>Page {{currPage}} of {{totalPage}}</span>
+        <button class="next-btn" onclick="navigateNextPage()" >Trang kế</button>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var selectElement = document.getElementById("filter-select");
+    function hidePagination() {
+    document.getElementById("pagination").style.display = "none";
+}
+
+// Hiển thị lại phần phân trang
+function showPagination() {
+    document.getElementById("pagination").style.display = "block";
+}
+    selectElement.addEventListener("change", function() {
+    // Lấy giá trị của option được chọn
+    var selectedValue = selectElement.value;
+    console.log(selectedValue)
+    if(selectedValue=="all") {
+        window.location.href='/views/getAllClass'
+        return
+    }
+    // Hiển thị tên của option được chọn
+     $.ajax({
+            url: `http://localhost:3000/class/classByCourse/${selectedValue}`,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            success: function(response) {
+                console.log('Course created successfully:',  response[0].classes);
+                
+                 $(".course-list").empty();
+                 hidePagination()
+                response[0].classes.forEach(function(classItem) {
+                   var courseCard = $("<div>", {
+                    "class": "course-card",
+                    "data-id": classItem.idCourse
+                 });
+
+    // Thêm thông tin của khóa học vào thẻ div
+                courseCard.append("<h2>Name: " + classItem.Name + "</h2>");
+                courseCard.append("<p>Ngày Bắt Đầu: " + classItem.startDay + "</p>");
+                courseCard.append("<p>Ngày Kết Thúc: " + classItem.endDay + "</p>");
+                courseCard.append("<p>Trạng Thái: " + classItem.Status + "</p>");
+                courseCard.append("<p>Tổng số học sinh: " + classItem.totalSession + "</p>");
+                courseCard.append("<p>Số học sinh đang học: " + classItem.NumeberStudent + "</p>");
+
+                // Thêm nút "Danh sách" và "Tạo lớp" vào thẻ div
+                var editBtn1 = $("<button>", {
+                    "class": "edit-btn",
+                    "onclick": "window.location.href='/views/editCourse/" + classItem.idCourse + "'",
+                    "text": "Danh sách"
+                });
+                var editBtn2 = $("<button>", {
+                    "class": "edit-btn",
+                    "onclick": "window.location.href='/views/editCourse/" + classItem.idCourse + "'",
+                    "text": "Tạo lớp"
+                });
+                courseCard.append(editBtn1);
+                courseCard.append(editBtn2);
+
+                // Thêm thẻ div này vào danh sách khóa học
+                $(".course-list").append(courseCard);
+                    }); 
+                
+                // Xử lý phản hồi thành công, ví dụ: hiển thị thông báo thành công cho người dùng
+            },
+            error: function(xhr, status, error) {
+                console.error('There was a problem creating the course:', error);
+                // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi cho người dùng
+            }
+        });
+});
+</script>
+<script>
+   document.querySelector(".search-container .search-btn").addEventListener("click", function() {
+    const searchInput = document.querySelector(".search-container .search-input").value;
+   
+      window.location.href = `/views/getAllClass?name=${searchInput}`
+
+    // Thực hiện request GET sử dụng Axios
+    {{!-- axios.get(`http://localhost:3000/course/search?name=${searchInput}`, {
+        withCredentials: true
+    })
+    .then(response => {
+
+        console.log('Dữ liệu tìm kiếm:', response.data);
+        // Xử lý dữ liệu tìm kiếm ở đây
+    })
+    .catch(error => {
+        console.error('Có lỗi xảy ra khi tìm kiếm:', error);
+        // Xử lý lỗi ở đây
+    });  --}}
+});
+
+
+    
+</script>
+<script>
+    function navigatePreviousPage() {
+    var currentPage = {{currPage}};
+    var previousPage = currentPage - 1;
+    if (previousPage <= 0) {
+        previousPage = 1;
+    }
+
+    // Lấy giá trị của tham số 'name' từ URL
+    var currentUrl = window.location.href;
+    var url = new URL(currentUrl);
+    var name = url.searchParams.get('name');
+
+   let newUrl
+    if(name){
+       newUrl   = '/views/getAllClass?name=' + encodeURIComponent(name) + '&page=' + previousPage;
+    }
+    else{
+        newUrl = '/views/getAllClass'+ '?page=' + previousPage
+    }
+
+
+    // Chuyển đến trang mới
+    window.location.href = newUrl;
+}
+
+
+   function navigateNextPage() {
+    var currentPage = {{currPage}};
+    var nextPage = currentPage + 1;
+    const totalPages = {{totalPage}};
+    if (nextPage > totalPages) {
+        nextPage = totalPages; // Đảm bảo không vượt quá số trang tối đa
+    }
+
+    // Lấy giá trị của tham số 'name' từ URL hiện tại
+    var currentUrl = window.location.href;
+    var url = new URL(currentUrl);
+    var name = url.searchParams.get('name');
+
+    // Tạo URL mới bao gồm tham số 'name' và 'page' cho trang tiếp theo
+      let newUrl;
+    if(name){
+       newUrl   = '/views/getAllClass?name=' + encodeURIComponent(name) + '&page=' + nextPage;
+    }
+    else{
+        newUrl = '/views/getAllClass'+ '?page=' + nextPage
+    }
+
+    // Chuyển đến trang mới
+    window.location.href = newUrl;
+}
+
+</script>
+
+
+

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký học</title>
+    <link rel="stylesheet" href="css/class.css">
+</head>
+<body>
+  
+    <main>
+        <section class="dang-ky">
+            <h2>Thông tin đăng ký</h2>
+            <form id="formDKy" action="#">
+                <div class="form-group">
+                    <label for="tai-khoan">Họ tên:</label>
+                    <input type="text" id="tai-khoan" name="tai-khoan" placeholder="Nhập tài khoản">
+                </div>
+                <div class="form-group">
+                    <label for="ma-hoc-sinh">Ngày Sinh:</label>
+                     <input type="date" id="ngay-ket-thuc" name="ngay-ket-thuc" required>
+                </div>
+                <div class="form-group">
+                    <label for="lop">Giới tính:</label>
+                    <select id="lop" name="lop">
+                        <option value="">Chọn </option>
+                        <option value="10A1">Nam</option>
+                         <option value="10A1">Nữ</option>
+                        
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="khoa-hoc">Khóa học:</label>
+                    <select id="khoa-hoc" name="khoa-hoc">
+                        <option value="">Chọn khóa học</option>
+                        {{#each courses}}
+                        <option value="{{Name}}">{{Name}}</option>
+                          {{/each}}
+                        
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lop">Lớp:</label>
+                    <select id="lop1" name="lop">
+                       
+                       
+                    </select>
+                </div>
+               
+                {{!-- <div class="form-group">
+                    <label for="so-buoi">Số buổi:</label>
+                    <input type="number" id="so-buoi" name="so-buoi" placeholder="Nhập số buổi">
+                </div>
+                <div class="form-group">
+                    <label for="hoc-phi">Học phí </label>
+                    <input type="number" id="hoc-phi" name="hoc-phi" placeholder="Nhập học phí mỗi buổi">
+                </div>
+                <div class="form-group">
+                    <label for="hinh-thuc-thanh-toan">Hình thức thanh toán:</label>
+                    <select id="hinh-thuc-thanh-toan" name="hinh-thuc-thanh-toan">
+                        <option value="">Chọn hình thức thanh toán</option>
+                        <option value="tien-mat">Tiền mặt</option>
+                        <option value="chuyen-khoan">Chuyển khoản</option>
+                    </select>
+                </div> --}}
+                <button type="submit">Đăng ký</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  var selectElement = document.getElementById("khoa-hoc");
+
+// Thêm sự kiện "change" vào thẻ select
+selectElement.addEventListener("change", function() {
+    // Lấy giá trị của option được chọn
+    var selectedValue = selectElement.value;
+    // Hiển thị tên của option được chọn
+     $.ajax({
+            url: `http://localhost:3000/class/classByCourse/${selectedValue}`,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            success: function(response) {
+                console.log('Course created successfully:',  response[0].classes);
+                 $("#lop1").empty();
+                response[0].classes.forEach(function(classItem) {
+                    var option = $("<option>", {
+                        value: classItem.idCourse,
+                        text: classItem.Name
+                    });
+                    $("#lop1").append(option);
+                    });
+                
+                // Xử lý phản hồi thành công, ví dụ: hiển thị thông báo thành công cho người dùng
+            },
+            error: function(xhr, status, error) {
+                console.error('There was a problem creating the course:', error);
+                // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi cho người dùng
+            }
+        });
+});
+</script>
+<script>
+     const showAlert = (type, msg) => {
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.parentElement.removeChild(alert);
+    }, 5000);
+  };
+    // Lắng nghe sự kiện "submit" của form
+document.querySelector("#formDKy").addEventListener('submit', function(event) {
+    // Ngăn chặn hành vi mặc định của form
+    event.preventDefault();
+
+    // Thu thập dữ liệu từ các trường input và select
+    const hoTen = document.getElementById('tai-khoan').value;
+    const ngaySinh = document.getElementById('ngay-ket-thuc').value;
+    const gioiTinh = document.getElementById('lop').value;
+    const khoaHoc = document.getElementById('khoa-hoc').value;
+    const lop = document.getElementById('lop1').value;
+
+    // Tạo một đối tượng chứa dữ liệu
+    const data = {
+        Name: hoTen,
+        BirthDay: ngaySinh,
+        Sex: gioiTinh,
+        nameCourse: khoaHoc,
+       nameClass: lop
+    };
+
+    // Gửi dữ liệu lên server bằng Axios
+    axios.post('http://localhost:3000/course/registerCourse', data)
+        .then(function(response) {
+              if(response.data.status=="Success"){
+          showAlert("success","Đăng ký thành công")
+        }
+            // Xử lý phản hồi từ server sau khi gửi thành công
+            console.log('Đã gửi dữ liệu thành công:', response);
+        })
+        .catch(function(error) {
+            // Xử lý lỗi nếu có
+            console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
+        });
+});
+
+</script>

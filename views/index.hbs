@@ -1,0 +1,108 @@
+<main>
+    <h1>Danh sách khóa học</h1>
+    <button class="add-btn" onclick="window.location.href='/views/addCourse'">Thêm khóa học</button> <!-- Thêm nút thêm khóa học -->
+   <div class="search-container">
+        <input type="text" class="search-input" placeholder="Tìm kiếm khóa học...">
+        <button  class="search-btn" >Tìm kiếm</button>
+    </div>
+    <div class="course-list">
+        {{#each courses}}
+            <div data-id="{{idCourse}}" class="course-card">
+                <!-- Thông tin của khóa học -->
+                <h2>Tên: {{Name}}</h2>
+                <p>Mô tả: {{describe}}</p>
+                <p>Trạng thái: {{status}}</p>
+                <p>Tổng số buổi học: {{totalSession}}</p>
+                <p>Học phí: {{tuition}}</p>
+                <button class="edit-btn" onclick="window.location.href='/views/editCourse/{{idCourse}}'">Chỉnh sửa</button>
+                 <button class="edit-btn" onclick="window.location.href='/views/addClass/{{idCourse}}'">Tạo lớp</button>
+            </div>
+        {{/each}}
+    </div>
+      <div class="pagination">
+        <button class="prev-btn" onclick="navigatePreviousPage()" >Trang trước</button>
+        <span>Trang {{currPage}} của {{totalPage}}</span>
+        <button class="next-btn" onclick="navigateNextPage()" >Trang kế</button>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+   document.querySelector(".search-container .search-btn").addEventListener("click", function() {
+    const searchInput = document.querySelector(".search-container .search-input").value;
+    console.log("Từ khóa tìm kiếm:", searchInput);
+      window.location.href = `/views/getAllCourse?name=${searchInput}`
+
+    // Thực hiện request GET sử dụng Axios
+    {{!-- axios.get(`http://localhost:3000/course/search?name=${searchInput}`, {
+        withCredentials: true
+    })
+    .then(response => {
+
+        console.log('Dữ liệu tìm kiếm:', response.data);
+        // Xử lý dữ liệu tìm kiếm ở đây
+    })
+    .catch(error => {
+        console.error('Có lỗi xảy ra khi tìm kiếm:', error);
+        // Xử lý lỗi ở đây
+    }); --}}
+});
+
+
+    
+</script>
+<script>
+    function navigatePreviousPage() {
+    var currentPage = {{currPage}};
+    var previousPage = currentPage - 1;
+    if (previousPage <= 0) {
+        previousPage = 1;
+    }
+
+    // Lấy giá trị của tham số 'name' từ URL
+    var currentUrl = window.location.href;
+    var url = new URL(currentUrl);
+    var name = url.searchParams.get('name');
+
+    let newUrl
+    if(name){
+       newUrl   = '/views/getAllCourse?name=' + encodeURIComponent(name) + '&page=' + previousPage;
+    }
+    else{
+        newUrl = '/views/getAllCourse'+ '?page=' + previousPage
+    }
+
+    // Chuyển đến trang mới
+    window.location.href = newUrl;
+}
+
+
+   function navigateNextPage() {
+    var currentPage = {{currPage}};
+    var nextPage = currentPage + 1;
+    const totalPages = {{totalPage}};
+    if (nextPage > totalPages) {
+        nextPage = totalPages; // Đảm bảo không vượt quá số trang tối đa
+    }
+
+    // Lấy giá trị của tham số 'name' từ URL hiện tại
+    var currentUrl = window.location.href;
+    var url = new URL(currentUrl);
+    var name = url.searchParams.get('name');
+    let newUrl;
+    if(name){
+       newUrl   = '/views/getAllCourse?name=' + encodeURIComponent(name) + '&page=' + nextPage;
+    }
+    else{
+        newUrl = '/views/getAllCourse'+ '?page=' + nextPage
+    }
+
+    // Tạo URL mới bao gồm tham số 'name' và 'page' cho trang tiếp theo
+   
+
+    // Chuyển đến trang mới
+    window.location.href = newUrl;
+}
+</script>
+
+
+

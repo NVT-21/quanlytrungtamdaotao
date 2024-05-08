@@ -1,0 +1,91 @@
+
+
+<div class="container">
+  
+  
+  <div id="create-course-form" data-id="{{teacher.idTeacher}}" >
+    <h2>Chỉnh sửa </h2>
+    <form 
+        <label for="name">Tên:</label>
+        <input type="text" id="nameCourse" name="name" value="{{teacher.Name}}" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="totalSession">Giới tính:</label>
+        <input type="text" id="totalSession" name="totalSession" value="{{teacher.Sex}}">
+      </div>
+      <div class="form-group">
+        <label for="totalSession">Trạng Thái:</label>
+        <input type="text" id="describe" name="describe" value="{{teacher.Status}}"  required>
+      </div>
+      
+      <div class="form-group">
+        <button type="submit">Sửa</button>
+      </div>
+    </form>
+  </div>
+  
+  <div id="create-class-form" style="display: none;">
+    <h2>Create Class</h2>
+    <form>
+      <!-- Add fields for creating a class -->
+    </form>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script >
+  const showAlert = (type, msg) => {
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.parentElement.removeChild(alert);
+    }, 5000);
+  };
+  document.getElementById('create-course-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const form= document.getElementById('create-course-form')
+  const idCourse=form.dataset.id
+    // Get form data
+    const nameInput = document.getElementById('nameCourse').value;
+    const Sex = document.getElementById('totalSession').value;
+    const Status = document.getElementById('describe').value;
+    console.log(nameInput )
+
+    // Get values from form elements
+  
+    // Create FormData object
+    const formData = new FormData();
+    formData.append('Name', nameInput);
+    formData.append('Sex', Sex);
+    formData.append('Status', Status);
+    
+    console.log(formData);
+    
+    const jsonData = {};
+    formData.forEach((value, key) => {
+      jsonData[key] = value;
+    });
+    
+    // Make a POST request using Axios
+    axios.patch(`http://localhost:3000/teacher/updateTeacher/${idCourse}`, jsonData,{
+      withCredentials: true
+  })
+      .then(response => {
+         if(response.data.status=="Success"){
+          showAlert("success","Sửa thành công")
+        }
+        console.log('Course created successfully:', response.data);
+        // Handle success response, e.g., show a success message to the user
+      })
+      .catch(error => {
+        console.error('There was a problem creating the course:', error);
+        // Handle error, e.g., show an error message to the user
+      });
+  });
+</script>
+
+</body>
+</html>

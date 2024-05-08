@@ -1,0 +1,71 @@
+<main>
+    <h1>Danh sách lớp học</h1>
+    <button class="add-btn" onclick="window.location.href='/views/addCourse'">Thêm khóa học</button> <!-- Thêm nút thêm khóa học -->
+   <div class="search-container">
+        <input type="text" class="search-input" placeholder="Tìm kiếm khóa học...">
+        <button  class="search-btn" >Tìm kiếm</button>
+    </div>
+    <div class="course-list">
+        {{#each courses}}
+            <div data-id="{{idCourse}}" class="course-card">
+                <!-- Thông tin của khóa học -->
+                <h2>Name: {{Name}}</h2>
+                <p>Description: {{describe}}</p>
+                <p>Status:{{status}}</p>
+                <p>Total Sessions: {{totalSession}}</p>
+                <p>Tuition: {{tuition}}</p>
+                <button class="edit-btn" onclick="window.location.href='/views/editCourse/{{idCourse}}'">Sửa</button>
+                
+            </div>
+        {{/each}}
+    </div>
+      <div class="pagination">
+        <button class="prev-btn" onclick="navigatePreviousPage()" >Previous</button>
+        <span>Page {{currPage}} of {{totalPage}}</span>
+        <button class="next-btn" onclick="navigateNextPage()" >Next</button>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+   document.querySelector(".search-container .search-btn").addEventListener("click", function() {
+    const searchInput = document.querySelector(".search-container .search-input").value;
+    console.log("Từ khóa tìm kiếm:", searchInput);
+      window.location.href = `/views/getAllCourse?name=${searchInput}`
+
+    // Thực hiện request GET sử dụng Axios
+    {{!-- axios.get(`http://localhost:3000/course/search?name=${searchInput}`, {
+        withCredentials: true
+    })
+    .then(response => {
+
+        console.log('Dữ liệu tìm kiếm:', response.data);
+        // Xử lý dữ liệu tìm kiếm ở đây
+    })
+    .catch(error => {
+        console.error('Có lỗi xảy ra khi tìm kiếm:', error);
+        // Xử lý lỗi ở đây
+    }); --}}
+});
+
+    
+</script>
+<script>
+    function navigatePreviousPage() {
+        var currentPage = {{currPage}};
+        var previousPage = currentPage - 1;
+        if(previousPage <= 0){
+            previousPage = 1
+        }
+        window.location.href = '/views/getAllCourse?page=' + previousPage;
+    }
+
+    function navigateNextPage() {
+        var currentPage = {{currPage}};
+        var nextPage = currentPage + 1;
+        const totalPages = {{totalPage}}
+        if(nextPage > totalPages){
+            nextPage = currPage
+        }
+        window.location.href = '/views/getAllCourse?page=' + nextPage;
+    }
+</script>
