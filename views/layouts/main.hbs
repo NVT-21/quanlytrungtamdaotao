@@ -9,7 +9,12 @@
     
 </head>
 <body>
-    {{>header}}
+   {{#if showHeaderFooter}}
+    <!-- Include header -->
+    
+{{else}}
+    {{> header}}
+{{/if}}
     {{{body}}}
     
 </body>

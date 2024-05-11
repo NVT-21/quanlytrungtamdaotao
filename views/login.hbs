@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="Login">
+        <h2>Đăng nhập</h2>
+        <form >
+            <div class="form-group">
+                <input type="text" name="username" id="username" placeholder="Tên tài khoản">
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" id="password" placeholder="Mật khẩu">
+            </div>
+            <button type="submit" class="btn">Đăng nhập</button>
+        </form>
+        <p>Chưa có tài khoản? <a href="/views/register">Đăng ký ngay</a></p>
+    </div>
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     const showAlert = (type, msg) => {
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.parentElement.removeChild(alert);
+    }, 5000);
+  };</script>
+
+  <script>
+      document.getElementById('Login').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+      const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Gửi yêu cầu POST đến endpoint đăng nhập
+            axios.post('http://localhost:3000/auth/login', { username, password })
+                .then(function(response) {
+                    if (response.data.status === "success") {
+                        showAlert("success", "Đăng nhập thành công");
+                        const token = response.data.token;
+                        localStorage.setItem('accessToken', token);
+                        localStorage.setItem('token', token);
+
+        // Gán token vào header authentication cho các yêu cầu tiếp theo
+                         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+           
+                        setTimeout(() => {
+                        window.location.href = '/views/getAllCourse'; // Replace with your actual 'home' page URL
+      }, 1000);
+                        // Chuyển hướng hoặc thực hiện các hành động tiếp theo sau khi đăng nhập thành công
+                    } else {
+                        showAlert("error", "Tên tài khoản hoặc mật khẩu không đúng");
+                    }
+                })
+                .catch(function(error) {
+                    // Xử lý lỗi nếu có
+                    console.error('Đã xảy ra lỗi khi gửi yêu cầu đăng nhập:', error);
+                    showAlert("error", error.response.data.error);
+                });
+        });axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
+      
+  </script>

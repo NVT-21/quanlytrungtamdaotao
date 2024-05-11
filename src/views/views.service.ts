@@ -63,11 +63,12 @@ export class ViewsService {
   }
   async getAllStudent(page: number = 1, limit: number = 10){
       const skip=(page - 1) * limit
-    return await this.registerRepository.find({
+   return await this.registerRepository.find({
       relations: ["student", "classes", "course"],
       skip: skip,
       take: limit,
     });
+    
   }
   async getStudentOfClass(id:number,page: number = 1, limit: number = 4){
     const skip = (page - 1) *limit; // Tính toán giá trị của skip

@@ -15,6 +15,7 @@ import { StudentModule } from './student/student.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { RegisterModule } from './register/register.module';
 import { TeacherModule } from './teacher/teacher.module';
+import { AuthModule } from './auth/auth.module';
 import { APP_FILTER } from '@nestjs/core';
 import { ViewsModule } from './views/views.module';
 
@@ -59,7 +60,8 @@ import { ViewsModule } from './views/views.module';
     AttendanceModule,
     RegisterModule,
     TeacherModule,
-    ViewsModule
+    ViewsModule,
+    AuthModule
    
   
 

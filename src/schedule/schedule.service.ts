@@ -29,7 +29,7 @@ const startDate = data.startDate; // 1/4/2024
 const schedule = data.schedule
 
 if(!startDate || !schedule){
-  throw new HttpException("not enough information",400)
+  throw new HttpException("bạn chưa điền đủ thông tin",400)
 }
 
 const totalSessions = data.totalSessions;

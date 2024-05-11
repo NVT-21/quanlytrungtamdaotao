@@ -27,7 +27,7 @@
                 <p>Số học sinh đang học:  {{totalStudent}}</p>
 
                 <button class="edit-btn" onclick="window.location.href='/views/StudentOfClass/{{idClass}}'">Danh sách học viên </button>
-                 <button class="edit-btn" onclick="window.location.href='/views/editCourse/{{idCourse}}'">Điểm danh</button>
+              
             </div>
         {{/each}}
     </div>
@@ -79,22 +79,18 @@ function showPagination() {
                 courseCard.append("<p>Ngày Bắt Đầu: " + classItem.startDay + "</p>");
                 courseCard.append("<p>Ngày Kết Thúc: " + classItem.endDay + "</p>");
                 courseCard.append("<p>Trạng Thái: " + classItem.Status + "</p>");
-                courseCard.append("<p>Tổng số học sinh: " + classItem.totalSession + "</p>");
+                courseCard.append("<p>Tổng số học sinh: " + classItem.NumeberStudent + "</p>");
                 courseCard.append("<p>Số học sinh đang học: " + classItem.NumeberStudent + "</p>");
 
                 // Thêm nút "Danh sách" và "Tạo lớp" vào thẻ div
                 var editBtn1 = $("<button>", {
                     "class": "edit-btn",
-                    "onclick": "window.location.href='/views/editCourse/" + classItem.idCourse + "'",
+                    "onclick": "window.location.href='/views/StudentOfClass/" + classItem.idCourse + "'",
                     "text": "Danh sách"
                 });
-                var editBtn2 = $("<button>", {
-                    "class": "edit-btn",
-                    "onclick": "window.location.href='/views/editCourse/" + classItem.idCourse + "'",
-                    "text": "Tạo lớp"
-                });
+                
                 courseCard.append(editBtn1);
-                courseCard.append(editBtn2);
+              
 
                 // Thêm thẻ div này vào danh sách khóa học
                 $(".course-list").append(courseCard);

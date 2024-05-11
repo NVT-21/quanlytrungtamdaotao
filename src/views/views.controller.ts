@@ -1,19 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Query, UseGuards } from '@nestjs/common';
 import { ViewsService } from './views.service';
 import { CreateViewDto } from './dto/create-view.dto';
 import { UpdateViewDto } from './dto/update-view.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/strategy/jwt.guard';
 
 @Controller('views')
 export class ViewsController {
   constructor(private readonly viewsService: ViewsService) {}
 
  
-
+  // @UseGuards(JwtAuthGuard)
   @Get('getAllCourse')
   @Render('index') // Assuming you are rendering some view
   async getAllCourse(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 8,
+    @Query('limit') limit: number = 4,
     @Query('name') name: string
   ) {
     try {
@@ -29,11 +31,21 @@ export class ViewsController {
       throw new Error('An error occurred while retrieving the list of courses.');
     }
   }
+  @Get('Login')
+  @Render('login')
+  login(){
+    return { showHeaderFooter: true};
+  }
+  @Get('register')
+  @Render('register')
+  register(){
+    return { showHeaderFooter: true};
+  }
   @Get('getAllTeacher')
   @Render('renderTeacher') // Assuming you are rendering some view
   async getAllTeacher(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 8,
+    @Query('limit') limit: number = 4,
     @Query('name') name: string
   ) {
     try {
@@ -54,7 +66,7 @@ export class ViewsController {
   @Render('renderClass') // Assuming you are rendering some view
   async getAllClass(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 8,
+    @Query('limit') limit: number = 4,
     @Query('name') name: string
   ) {
     try {
@@ -109,7 +121,7 @@ export class ViewsController {
   @Render('renderAllStudent')
   async renderStudent(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 8,
+    @Query('limit') limit: number = 4,
     
   ) {
     const totalCourse=await this.viewsService.totalStudent()

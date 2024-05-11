@@ -175,7 +175,7 @@ for (let i = 1; i < rows.length; i++) { // Bắt đầu từ 1 để bỏ qua h�
 // Hiển thị mảng object đã tạo
 console.log(data);
 
-    if (table.rows.length <= 1) {
+    if (table.rows.length <= 0) {
             alert("Vui lòng thêm thời gian học trước khi tạo lớp!");
             return; // Ngăn chặn tiếp tục thực hiện hành động mặc định của nút submit
         }
@@ -209,11 +209,13 @@ console.log(data);
           if(response.data.status=="Success"){
           showAlert("success","Tạo mới thành công")
         }
-        console.log('Course created successfully:', response.data);
+       
+        console.log('Course created successfully:', response.data.error);
         // Handle success response, e.g., show a success message to the user
       })
       .catch(error => {
-        console.error('There was a problem creating the course:', error);
+         
+        console.error('There was a problem creating the course:', response.data.error);
         // Handle error, e.g., show an error message to the user
       });
         }
@@ -243,11 +245,16 @@ console.log(data);
 
 // Lấy tất cả các ô trong cột "Ngày trong tuần" (cột đầu tiên)
 const ngayTrongTuanCells = document.querySelectorAll('#Schedule td:nth-child(1)');
-
+   
 // Lặp qua từng ô và lấy giá trị của nó, sau đó thêm vào mảng
+
 ngayTrongTuanCells.forEach(cell => {
     ngayTrongTuanValues.push(cell.textContent);
 });
+if(ngayTrongTuanCells.length <= 0){
+    alert("Bạn chưa điền đủ thông tin")
+    return ;
+}
     const data ={
         "startDate":ngaybd,
         "schedule":ngayTrongTuanValues,
@@ -281,7 +288,7 @@ document.getElementById('ngay-ket-thuc').value = formattedDate;
         // Handle success response, e.g., show a success message to the user
       })
       .catch(error => {
-        showAlert("error",error.message)
+        showAlert("error",error.response.data.error)
         console.error('There was a problem creating the course:', error);
         // Handle error, e.g., show an error message to the user
       });

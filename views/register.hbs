@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.alert--success {
+    background-color: #28a745;
+}
+
+.alert--error {
+    background-color: #dc3545;
+}
+
+    </style>
+</head>
+<body>
+    <div id="signupForm" class="container">
+        <h2>Đăng ký</h2>
+        <form >
+            <div class="form-group">
+                <input type="text" name="username" id="username" placeholder="Tên tài khoản" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" id="password" placeholder="Mật khẩu" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Xác nhận mật khẩu" required>
+            </div>
+            <button type="submit" class="btn">Đăng ký</button>
+        </form>
+        <p>Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+    </div>
+
+   
+</body>
+</html>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     const showAlert = (type, msg) => {
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+
+    // Remove alert after 5 seconds
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.parentElement.removeChild(alert);
+    }, 5000);
+  };</script>
+
+  <script>
+      document.getElementById('signupForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+      const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+             const passwordConfirm = document.getElementById('confirmPassword').value;
+
+            // Gửi yêu cầu POST đến endpoint đăng nhập
+            axios.post('http://localhost:3000/auth/register', { username, password,passwordConfirm })
+                .then(function(response) {
+                    if (response.data.status === "success") {
+                        showAlert("success", "Đăng nhập thành công");                  
+                        setTimeout(() => {
+                        window.location.href = '/views/login'; // Replace with your actual 'home' page URL
+      }, 1000);
+                        // Chuyển hướng hoặc thực hiện các hành động tiếp theo sau khi đăng nhập thành công
+                    } 
+                })
+                .catch(function(error) {
+                    // Xử lý lỗi nếu có
+                    console.error('Đã xảy ra lỗi khi gửi yêu cầu đăng nhập:', error);
+                    showAlert("error", error.response.data.error);
+                });
+        });
+      
+  </script>

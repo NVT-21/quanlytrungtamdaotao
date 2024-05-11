@@ -67,7 +67,7 @@ export class CourseService {
     newRegister.student=newStudent;
     newRegister.course=curCourse;
     newRegister.Status="Đang chờ "
-    return this.registerRepository.save(newRegister);
+    return {register:this.registerRepository.save(newRegister),status:"Success"};
   }
   else if(nameCourse && newStudent && nameClass) {
     const curCourse = await this.courseRepository.findOne({
