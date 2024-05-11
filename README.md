@@ -58,16 +58,23 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Introduce 
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Một website với các chức năng: phân trang, tìm kiếm giáo viên, lớp học, khóa học. Tạo lớp học cho khóa học, sau đó tạo lịch học cho khóa học. Thêm học sinh vào lớp
 
-## Stay in touch
+- Trang đăng nhập , đăng ký :
+    ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/8e0312ae-7e4d-4797-b0cf-20e8397e0c97)
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/67dd16dd-eb01-49ad-8bf5-f04857778986)
+- Sau khi đăng nhập xong thì sẽ vào màn hình chính ở đấy sẽ hiện ra các khóa học của trung tâm :
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/a3fa60c7-1873-481d-ad32-5ee6801dd7df)
+- Rồi ta có thể ấn vào nút tạo lớp để mà tạo lớp được cho khóa học đó :
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/c53397ad-a2a0-4d72-88fe-8beb667f379f)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
 
-Nest is [MIT licensed](LICENSE).
+
+
+
+
+
+
