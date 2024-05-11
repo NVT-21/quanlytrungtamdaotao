@@ -69,6 +69,21 @@ Một website với các chức năng: phân trang, tìm kiếm giáo viên, l�
   ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/a3fa60c7-1873-481d-ad32-5ee6801dd7df)
 - Rồi ta có thể ấn vào nút tạo lớp để mà tạo lớp được cho khóa học đó :
   ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/c53397ad-a2a0-4d72-88fe-8beb667f379f)
+- Ta sẽ chọn lịch học cho lớp học ta đang tạo , rồi từ lịch học , tổng số buổi học , ngày bắt đầu , sẽ tính ra được ngày kết thúc của khóa học đó
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/0ad8bdf7-ed64-4b10-80b5-d3c5c6a442ad)
+- Ta dăng ký học viên cho khóa học , khi ta chọn khóa học thì sẽ hiện ra các lớp của khóa học đó , khi ấn thêm thì học viên sẽ được vào khóa học , trong trường hợp
+  khóa học đó không có lớp nào thì sinh viên sẽ được cho vào hàng chờ của khóa học đó 
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/5d847d96-1c98-4a51-8248-a044a5183b82)
+- Ta có thể phân loại được lớp học của các khóa học , biết được số người đang học khóa học , rồi có thể xem được cả danh sách học viên đang theo học , rồi có thể thêm học
+  viên mà đang trong danh sách chờ của khóa học đó vào lớp 
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/151b7fe7-980d-4ee6-ba82-b74f8751d231)
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/d39323e7-62cb-4332-aa29-0efaa2811ef6)
+  ![image](https://github.com/NVT-21/quanlytrungtamdaotao/assets/116005839/5276153e-742b-4cda-b03d-20577f0933a0)
+
+
+
+
+
 
 
 
